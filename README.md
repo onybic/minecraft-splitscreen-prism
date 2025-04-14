@@ -37,9 +37,9 @@ Note: This script assumes the Steam Deck's internal controller is disabled when 
      - Create an offline account (P1, P2, P3, P4)
      - Set controller index (0, 1, 2, 3 respectively) in the ingame settings for Controllable (controller icon in the settings menu)
 
-3. Download the script:
+3. Download `minecraft.sh`:
    ```bash
-   wget https://raw.githubusercontent.com/YOUR_USERNAME/Minecraft-Splitscreen/main/minecraft.sh
+   wget https://raw.githubusercontent.com/ArnoldSmith86/Minecraft-Splitscreen/main/minecraft.sh
    chmod +x minecraft.sh
    ```
 
@@ -54,7 +54,7 @@ Note: This script assumes the Steam Deck's internal controller is disabled when 
 
 ## Usage
 
-Run the script:
+When in Desktop Mode, just run the script:
 ```bash
 ./minecraft.sh
 ```
@@ -64,6 +64,8 @@ The script will:
 2. Launch appropriate number of Minecraft instances
 3. Arrange windows in splitscreen
 4. Remove window borders
+
+When in Game Mode, launch it from the shortcut in Steam.
 
 ## License
 
