@@ -1,6 +1,6 @@
-# Minecraft Splitscreen
+# Minecraft Splitscreen for Steam Deck
 
-A script to run multiple instances of Minecraft in splitscreen mode on Linux using PollyMC and KDE Plasma.
+A script to run multiple instances of Minecraft in splitscreen mode on Steam Deck using PollyMC and KDE Plasma.
 
 ## Features
 
@@ -12,28 +12,22 @@ A script to run multiple instances of Minecraft in splitscreen mode on Linux usi
 
 ## Requirements
 
-- Linux with KDE Plasma
+- Steam Deck
 - PollyMC (Flatpak)
 - Game Mode
 - Controllers (optional)
-- [Steam-Deck.Auto-Disable-Steam-Controller](https://github.com/scawp/Steam-Deck.Auto-Disable-Steam-Controller) (required for Steam Deck)
+- [Steam-Deck.Auto-Disable-Steam-Controller](https://github.com/scawp/Steam-Deck.Auto-Disable-Steam-Controller) (required)
 
 Note: This script assumes the Steam Deck's internal controller is disabled when external controllers are connected. Without this, controller indices and calculations need to be adjusted.
 
 ## Installation
 
-1. Install Flatpak if not already installed:
-   ```bash
-   sudo apt install flatpak
-   flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-   ```
-
-2. Install PollyMC:
+1. Install PollyMC:
    ```bash
    flatpak install flathub org.fn2006.PollyMC
    ```
 
-3. Setup Minecraft instances:
+2. Setup Minecraft instances:
    - Launch PollyMC
    - Create a new instance named "1.20.1-1" with Minecraft 1.20.1
    - Install Forge and Framework mod
@@ -43,14 +37,13 @@ Note: This script assumes the Steam Deck's internal controller is disabled when 
      - Create an offline account (P1, P2, P3, P4)
      - Set controller index (0, 1, 2, 3 respectively) in the ingame settings for Controllable (controller icon in the settings menu)
 
-4. Clone this repository:
+3. Download the script:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/Minecraft-Splitscreen.git
-   cd Minecraft-Splitscreen
+   wget https://raw.githubusercontent.com/YOUR_USERNAME/Minecraft-Splitscreen/main/minecraft.sh
    chmod +x minecraft.sh
    ```
 
-5. Add to Steam:
+4. Add to Steam:
    - Open Steam
    - Click "Add a Game" > "Add a Non-Steam Game"
    - Click "Browse" and select the `minecraft.sh` script
