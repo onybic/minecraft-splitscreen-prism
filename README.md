@@ -65,7 +65,12 @@ The script will:
 3. Arrange windows in splitscreen
 4. Remove window borders
 
-When in Game Mode, launch it from the shortcut in Steam.
+When in Game Mode, use the shortcut (`launchFromGameMode` is important).
+
+To link the instances:
+1. In the first instance (P1), start a singleplayer world
+2. Open the world to LAN (Esc > Open to LAN)
+3. In other instances, go to Multiplayer and join the LAN game
 
 ## License
 
