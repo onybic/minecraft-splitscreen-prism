@@ -76,12 +76,11 @@ ____EOF
 }
 
 launchGame() {
-    rm "/home/deck/.var/app/org.fn2006.PollyMC/data/PollyMC/instances/$1/.minecraft/logs/latest.log"
-    flatpak run org.fn2006.PollyMC -l "$1" -a "$2" &
-    while ! grep mclanguage "/home/deck/.var/app/org.fn2006.PollyMC/data/PollyMC/instances/$1/.minecraft/logs/latest.log"; do
+    /home/deck/.local/share/PollyMC/PollyMC-Linux-x86_64.AppImage -l "$1" -a "$2" &
+    # wait for the game window to appear so the order of the windows is correct
+    while [ $(xwininfo -root -tree | grep 854x480 | wc -l) -lt 1 ]; do
         sleep 1
     done
-    sleep 1
 }
 
 launchGames() {
@@ -109,7 +108,7 @@ if [ "$1" = launchFromGameMode ]; then
     qdbus org.kde.Shutdown /Shutdown org.kde.Shutdown.logout
 elif [ "$1" = fromGameMode ]; then
     if [ "$numberOfControllers" -lt 2 ]; then
-        flatpak run org.fn2006.PollyMC -l 1.20.1-1 -a P1
+        /home/deck/.local/share/PollyMC/PollyMC-Linux-x86_64.AppImage -l 1.20.1-1 -a P1
     else
         echo -e "[Desktop Entry]\nExec=$0 launchFromGameMode\nIcon=dialog-scripts\nName=sm64.sh\nPath=\nType=Application\nX-KDE-AutostartScript=true" > ~/.config/autostart/minecraft.desktop
         nestedPlasma

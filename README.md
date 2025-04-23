@@ -10,54 +10,21 @@ A script to run multiple instances of Minecraft in splitscreen mode on Steam Dec
 - Arranges windows in a grid layout
 - Works with Game Mode
 
-## Requirements
-
-- Steam Deck
-- PollyMC (Flatpak)
-- Game Mode
-- Controllers (optional)
-- [Steam-Deck.Auto-Disable-Steam-Controller](https://github.com/scawp/Steam-Deck.Auto-Disable-Steam-Controller) (required)
-
-Note: This script assumes the Steam Deck's internal controller is disabled when external controllers are connected. Without this, controller indices and calculations need to be adjusted.
-
 ## Installation
 
-1. Install PollyMC:
-   ```bash
-   flatpak install flathub org.fn2006.PollyMC
-   ```
+Download [Install Minecraft.desktop](https://raw.githubusercontent.com/ArnoldSmith86/minecraft-splitscreen/refs/heads/main/Install%20Minecraft.desktop) with your Steam Deck in Desktop Mode and open it in the file browser Dolphin.
 
-2. Setup Minecraft instances:
-   - Launch PollyMC
-   - Create a new instance named "1.20.1-1" with Minecraft 1.20.1
-   - Install Forge and Framework mod
-   - Add `controllable-forge-1.20.1-0.21.7-release.jar` which is https://github.com/MrCrayfish/Controllable/ with a patch to more easily select different controllers per instance
-   - Copy this instance 3 times, naming them "1.20.1-2", "1.20.1-3", and "1.20.1-4"
-   - For each instance:
-     - Create an offline account (P1, P2, P3, P4)
-     - Set controller index (0, 1, 2, 3 respectively) in the ingame settings for Controllable (controller icon in the settings menu)
-
-3. Download `minecraft.sh`:
-   ```bash
-   wget https://raw.githubusercontent.com/ArnoldSmith86/Minecraft-Splitscreen/main/minecraft.sh
-   chmod +x minecraft.sh
-   ```
-
-4. Add to Steam:
-   - Open Steam
-   - Click "Add a Game" > "Add a Non-Steam Game"
-   - Click "Browse" and select the `minecraft.sh` script
-   - Click "Add Selected Programs"
-   - Right-click the new entry in your library
-   - Select "Properties"
-   - In "LAUNCH OPTIONS", add: `launchFromGameMode`
+It should:
+- Download PollyMC and Java 17
+- Create 4 Minecraft 1.20.1 instances with a pre-configured Controllable mod so each instance can be controlled using a different controller
+- Create 4 offline accounts in PollyMC
+- Download my launch wrapper that starts four Minecraft instances in a splitscreen configuration from Game Mode
+- Shutdown Steam in order to add the launch wrapper to Steam with artwork from steamgriddb.com
+- Restart Steam (still in Desktop Mode)
 
 ## Usage
 
-When in Desktop Mode, just run the script:
-```bash
-./minecraft.sh
-```
+Start Minecraft from Game Mode.
 
 The script will:
 1. Detect connected controllers
@@ -65,12 +32,14 @@ The script will:
 3. Arrange windows in splitscreen
 4. Remove window borders
 
-When in Game Mode, use the shortcut (`launchFromGameMode` is important).
-
 To link the instances:
 1. In the first instance (P1), start a singleplayer world
 2. Open the world to LAN (Esc > Open to LAN)
 3. In other instances, go to Multiplayer and join the LAN game
+
+## Troubleshooting
+
+While testing the installation, sometimes the instances could not connect to the LAN server. Restarting the Steam Deck completely seemed to help. No idea what's going on there.
 
 ## License
 
