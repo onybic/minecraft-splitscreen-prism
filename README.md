@@ -43,6 +43,13 @@ To link the instances:
 
 While testing the installation, sometimes the instances could not connect to the LAN server. Restarting the Steam Deck completely seemed to help. No idea what's going on there.
 
+## Notes
+
+- The first launch takes quite a while because it's downloading all the assets
+- On my TV, I set Minecraft to do 1440p in the Game Mode settings and I reduced UI scale by 1 so that the crafting table and its recipes fit next to each other
+- After closing all instances, you get back to Game Mode but you still gotta press Back once
+- Power Saving settings from Desktop Mode apply - so turn off screen blanking and auto-sleep
+
 ## License
 
 MIT License - see LICENSE file for details 
