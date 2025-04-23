@@ -78,7 +78,7 @@ ____EOF
 launchGame() {
     /home/deck/.local/share/PollyMC/PollyMC-Linux-x86_64.AppImage -l "$1" -a "$2" &
     # wait for the game window to appear so the order of the windows is correct
-    while [ $(xwininfo -root -tree | grep 854x480 | wc -l) -lt 1 ]; do
+    while [ $(xwininfo -root -tree | grep 854x480 | wc -l) -lt $3 ]; do
         sleep 1
     done
 }
@@ -86,10 +86,10 @@ launchGame() {
 launchGames() {
     qdbus org.kde.plasmashell /PlasmaShell evaluateScript "panelById(panelIds[0]).hiding = 'autohide';"
 
-    launchGame 1.20.1-1 P1
-    launchGame 1.20.1-2 P2
-    [ "$numberOfControllers" -gt 2 ] && launchGame 1.20.1-3 P3
-    [ "$numberOfControllers" -gt 3 ] && launchGame 1.20.1-4 P4
+    launchGame 1.20.1-1 P1 1
+    launchGame 1.20.1-2 P2 2
+    [ "$numberOfControllers" -gt 2 ] && launchGame 1.20.1-3 P3 3
+    [ "$numberOfControllers" -gt 3 ] && launchGame 1.20.1-4 P4 4
 
     splitScreen
 
