@@ -243,6 +243,7 @@ ________EOF
     fi
 
     # download the launch wrapper
+    rm -f minecraft.sh
     wget https://raw.githubusercontent.com/ArnoldSmith86/minecraft-splitscreen/refs/heads/main/minecraft.sh
     chmod +x minecraft.sh
 
