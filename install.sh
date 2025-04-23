@@ -247,10 +247,13 @@ ________EOF
     chmod +x minecraft.sh
 
     # add the launch wrapper to Steam
-    steam -shutdown
-    while pgrep -F ~/.steam/steam.pid; do
-        sleep 1
-    done
-    curl https://raw.githubusercontent.com/ArnoldSmith86/minecraft-splitscreen/refs/heads/main/add-to-steam.py | python
-    nohup steam &
+    if ! grep -q local/share/PollyMC/minecraft ~/.steam/steam/userdata/*/config/shortcuts.vdf; then
+        steam -shutdown
+        while pgrep -F ~/.steam/steam.pid; do
+            sleep 1
+        done
+        [ -f shortcuts-backup.tar.xz ] || tar cJf shortcuts-backup.tar.xz ~/.steam/steam/userdata/*/config/shortcuts.vdf
+        curl https://raw.githubusercontent.com/ArnoldSmith86/minecraft-splitscreen/refs/heads/main/add-to-steam.py | python
+        nohup steam &
+    fi
 popd
