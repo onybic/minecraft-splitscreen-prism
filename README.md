@@ -22,6 +22,8 @@ It should:
 - Shutdown Steam in order to add the launch wrapper to Steam with artwork from steamgriddb.com
 - Restart Steam (still in Desktop Mode)
 
+Note that personally, I'm using [Steam-Deck.Auto-Disable-Steam-Controller](https://github.com/scawp/Steam-Deck.Auto-Disable-Steam-Controller) to disable the internal Steam Deck controller whenever an external controller is connected. You might have to rearrange controller order or change the controller index in Controllable if you don't use it.
+
 ## Usage
 
 Start Minecraft from Game Mode.
