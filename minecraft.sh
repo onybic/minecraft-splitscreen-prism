@@ -106,13 +106,13 @@ if [ "$1" = launchFromGameMode ]; then
     sleep 1
     launchGames
     qdbus org.kde.Shutdown /Shutdown org.kde.Shutdown.logout
-elif [ "$1" = fromGameMode ]; then
+elif xwininfo -root -tree | grep -q plasmashell; then
+    launchGames
+else
     if [ "$numberOfControllers" -lt 2 ]; then
         /home/deck/.local/share/PollyMC/PollyMC-Linux-x86_64.AppImage -l 1.20.1-1 -a P1
     else
-        echo -e "[Desktop Entry]\nExec=$0 launchFromGameMode\nIcon=dialog-scripts\nName=sm64.sh\nPath=\nType=Application\nX-KDE-AutostartScript=true" > ~/.config/autostart/minecraft.desktop
+        echo -e "[Desktop Entry]\nExec=$0 launchFromGameMode\nIcon=dialog-scripts\nName=Minecraft\nPath=\nType=Application\nX-KDE-AutostartScript=true" > ~/.config/autostart/minecraft.desktop
         nestedPlasma
     fi
-else
-    launchGames
 fi
