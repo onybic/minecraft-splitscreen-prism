@@ -77,7 +77,7 @@ ____EOF
 
 launchGame() {
     windowCountBeforeLaunch=$(xwininfo -root -tree | grep 854x480 | wc -l)
-    /home/deck/.local/share/PollyMC/PollyMC-Linux-x86_64.AppImage -l "$1" -a "$2" &
+    kde-inhibit --power --screenSaver --colorCorrect --notifications /home/deck/.local/share/PollyMC/PollyMC-Linux-x86_64.AppImage -l "$1" -a "$2" &
     # wait for the game window to appear so the order of the windows is correct
     while [ $(xwininfo -root -tree | grep 854x480 | wc -l) -le $windowCountBeforeLaunch ]; do
         sleep 1
