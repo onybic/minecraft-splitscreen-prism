@@ -10,20 +10,29 @@
 export target=/tmp
 
 splitScreen() {
-    splitScreenKwinScript > "$target/splitscreen_kwinscript"
+    local pattern=$1
+    splitScreenKwinScript "$pattern" > "$target/splitscreen_kwinscript"
     executeKwinScript "$target/splitscreen_kwinscript"
     rm "$target/splitscreen_kwinscript"
 }
 
 splitScreenKwinScript() {
+    local pattern=$1
     cat <<____EOF
         var workspace = workspace || {};
         var area = workspace.clientArea(0, 0, 1, 1);
 
-        let windows = workspace.clientList().filter(w=>w.normalWindow && !w.skipTaskbar && !w.minimized);
+        let allWindows = workspace.clientList().filter(w=>w.normalWindow && !w.skipTaskbar);
+        let matchingWindows = allWindows.filter(w => w.caption.match(/$pattern/));
+        let nonMatchingWindows = allWindows.filter(w => !w.caption.match(/$pattern/));
+
+        // Minimize non-matching windows
+        for (var i = 0; i < nonMatchingWindows.length; i++) {
+            nonMatchingWindows[i].minimized = true;
+        }
 
         // Calculate the number of windows per row/column
-        var numWindows = windows.length;
+        var numWindows = matchingWindows.length;
         var numRows = numWindows == 2 ? 1 : Math.ceil(Math.sqrt(numWindows));
         var numCols = Math.ceil(numWindows / numRows);
 
@@ -31,8 +40,8 @@ splitScreenKwinScript() {
         var windowWidth = area.width / numCols;
         var windowHeight = area.height / numRows;
 
-        for (var i = 0; i < windows.length; i++) {
-            var window = windows[i];
+        for (var i = 0; i < matchingWindows.length; i++) {
+            var window = matchingWindows[i];
             var row = Math.floor(i / numCols);
             var col = i % numCols;
             var x = col * windowWidth;
@@ -92,7 +101,7 @@ launchGames() {
     [ "$numberOfControllers" -gt 2 ] && launchGame 1.20.1-3 P3
     [ "$numberOfControllers" -gt 3 ] && launchGame 1.20.1-4 P4
 
-    splitScreen
+    splitScreen "Minecraft"
 
     wait
 
