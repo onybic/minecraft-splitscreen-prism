@@ -128,6 +128,7 @@ launchGames() {
         else
             SCRIPT_PATH="$(readlink -f "$0")"
             echo "Creating autostart file with script path: $SCRIPT_PATH"
+            mkdir -p ~/.config/autostart
             echo -e "[Desktop Entry]\nExec=\"$SCRIPT_PATH\" launchFromGameMode\nIcon=dialog-scripts\nName=Minecraft\nPath=\nType=Application\nX-KDE-AutostartScript=true" > ~/.config/autostart/minecraft.desktop
             chmod +x ~/.config/autostart/minecraft.desktop
             echo "Autostart file created at ~/.config/autostart/minecraft.desktop"
