@@ -109,20 +109,29 @@ launchGames() {
     sleep 2
 }
 
-export numberOfControllers=$(( $(ls -1 /dev/input/js* | wc -l) / 2 )) # each one should have the real one and an emulated xbox one
+(
+    echo "$(date) - Script called with $# arguments: $@"
+    export numberOfControllers=$(( $(ls -1 /dev/input/js* | wc -l) / 2 )) # each one should have the real one and an emulated xbox one
+    echo "Number of controllers: $numberOfControllers:"
+    ls -l /dev/input/js*
 
-if [ "$1" = launchFromGameMode ]; then
-    rm ~/.config/autostart/minecraft.desktop
-    sleep 1
-    launchGames
-    qdbus org.kde.Shutdown /Shutdown org.kde.Shutdown.logout
-elif xwininfo -root -tree | grep -q plasmashell; then
-    launchGames
-else
-    if [ "$numberOfControllers" -lt 2 ]; then
-        /home/deck/.local/share/PollyMC/PollyMC-Linux-x86_64.AppImage -l 1.20.1-1 -a P1
+    if [ "$1" = launchFromGameMode ]; then
+        rm ~/.config/autostart/minecraft.desktop
+        sleep 1
+        launchGames
+        qdbus org.kde.Shutdown /Shutdown org.kde.Shutdown.logout
+    elif xwininfo -root -tree | grep -q plasmashell; then
+        launchGames
     else
-        echo -e "[Desktop Entry]\nExec=$0 launchFromGameMode\nIcon=dialog-scripts\nName=Minecraft\nPath=\nType=Application\nX-KDE-AutostartScript=true" > ~/.config/autostart/minecraft.desktop
-        nestedPlasma
+        if [ "$numberOfControllers" -lt 2 ]; then
+            /home/deck/.local/share/PollyMC/PollyMC-Linux-x86_64.AppImage -l 1.20.1-1 -a P1
+        else
+            SCRIPT_PATH="$(readlink -f "$0")"
+            echo "Creating autostart file with script path: $SCRIPT_PATH"
+            echo -e "[Desktop Entry]\nExec=\"$SCRIPT_PATH\" launchFromGameMode\nIcon=dialog-scripts\nName=Minecraft\nPath=\nType=Application\nX-KDE-AutostartScript=true" > ~/.config/autostart/minecraft.desktop
+            chmod +x ~/.config/autostart/minecraft.desktop
+            echo "Autostart file created at ~/.config/autostart/minecraft.desktop"
+            nestedPlasma
+        fi
     fi
-fi
+) >> /home/deck/.local/share/PollyMC/minecraft.sh.log 2>&1
