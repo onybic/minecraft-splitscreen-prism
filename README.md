@@ -47,7 +47,6 @@ While testing the installation, sometimes the instances could not connect to the
 
 - The first launch takes quite a while because it's downloading all the assets
 - On my TV, I set Minecraft to do 1440p in the Game Mode settings and I set UI scale to 3 so that the crafting table and its recipes fit next to each other
-- After closing all instances, you get back to Game Mode but you still gotta press Back once
 
 ## License
 

@@ -17,12 +17,13 @@ splitScreen() {
 }
 
 splitScreenKwinScript() {
+    # for debugging run "kwin_x11 --replace" in Desktop Mode before executing the script
+    # inspiration from https://github.com/darkstego/Mudeer/blob/master/package/contents/code/main.js
     local pattern=$1
     cat <<____EOF
-        var workspace = workspace || {};
-        var area = workspace.clientArea(0, 0, 1, 1);
+        const area = workspace.clientArea(KWin.FullScreenArea, workspace.activeWindow)
 
-        let allWindows = workspace.clientList().filter(w=>w.normalWindow && !w.skipTaskbar);
+        let allWindows = workspace.stackingOrder.filter(w=>w.normalWindow && !w.skipTaskbar);
         let matchingWindows = allWindows.filter(w => w.caption.match(/$pattern/));
         let nonMatchingWindows = allWindows.filter(w => !w.caption.match(/$pattern/));
 
@@ -47,7 +48,7 @@ splitScreenKwinScript() {
             var x = col * windowWidth;
             var y = row * windowHeight;
             window.noBorder = true;
-            window.geometry = { x: x, y: y, width: windowWidth, height: windowHeight };
+            window.frameGeometry = { x: x, y: y, width: windowWidth, height: windowHeight };
         }
 ____EOF
 }
@@ -58,9 +59,7 @@ executeKwinScript() {
     # install the script
     ID=$(dbus-send --session --dest=org.kde.KWin --print-reply=literal /Scripting org.kde.kwin.Scripting.loadScript "string:$1" "string:splitscreen" | awk '{print $2}')
     # run it
-    dbus-send --session --dest=org.kde.KWin --print-reply=literal "/$ID" org.kde.kwin.Script.run >/dev/null 2>&1
-    # stop it
-    dbus-send --session --dest=org.kde.KWin --print-reply=literal "/$ID" org.kde.kwin.Script.stop >/dev/null 2>&1
+    qdbus org.kde.KWin /Scripting start
     # uninstall it
     dbus-send --session --dest=org.kde.KWin --print-reply=literal /Scripting org.kde.kwin.Scripting.unloadScript "string:splitscreen" >/dev/null 2>&1
 }
