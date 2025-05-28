@@ -34,7 +34,7 @@ splitScreenKwinScript() {
 
         // Calculate the number of windows per row/column
         var numWindows = matchingWindows.length;
-        var numRows = numWindows == 2 ? 1 : Math.ceil(Math.sqrt(numWindows));
+        var numRows = Math.ceil(Math.sqrt(numWindows));
         var numCols = Math.ceil(numWindows / numRows);
 
         // Calculate the width and height of each window
