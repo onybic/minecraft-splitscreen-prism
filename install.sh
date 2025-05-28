@@ -55,6 +55,9 @@ ________EOF
 
             if [ ! -f ".minecraft/options.txt" ]; then
                 echo -e "onboardAccessibility:false\nskipMultiplayerWarning:true\ntutorialStep:none" > .minecraft/options.txt
+                if [ "$i" -gt 1 ]; then
+                    echo "soundCategory_music:0" >> .minecraft/options.txt
+                fi
             fi
 
             if [ ! -f ".minecraft/config/controllable-client.toml" ]; then
