@@ -27,6 +27,7 @@ pushd $targetDir
             LastHostname=$HOSTNAME
             MaxMemAlloc=4096
             MinMemAlloc=512
+            UseNativeOpenAL=true
 ________EOF
     fi
 
