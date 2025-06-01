@@ -133,7 +133,7 @@ launchGames() {
     [ "$numberOfControllers" -gt 3 ] && launchGame 1.20.1-4 P4
 
     qdbus org.kde.plasmashell /PlasmaShell evaluateScript "panelById(panelIds[0]).hiding = 'autohide';" # didn't always trigger the first time
-    splitScreen "Minecraft"
+    splitScreen "^Minecraft"
 
     wait $(<minecraft.pid)
 

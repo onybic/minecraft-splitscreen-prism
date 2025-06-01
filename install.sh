@@ -312,7 +312,7 @@ ________EOF
 
     # download the launch wrapper
     rm -f minecraft.sh
-    curlProgress ce1247344b1ef1531a93d2f32eb53ea9 \
+    curlProgress 7ebf79bf258ff75d03cfa1074198ef1a \
                  'Launch script' \
                  minecraft.sh \
                  https://raw.githubusercontent.com/ArnoldSmith86/minecraft-splitscreen/refs/heads/main/minecraft.sh
