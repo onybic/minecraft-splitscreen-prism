@@ -9,6 +9,7 @@
 
 export target=/tmp
 
+# writes a KWin (Steam Deck window manager) script to a file and executes it
 splitScreen() {
     local pattern=$1
     splitScreenKwinScript "$pattern" > "$target/splitscreen_kwinscript"
@@ -16,6 +17,7 @@ splitScreen() {
     rm "$target/splitscreen_kwinscript"
 }
 
+# creates a KWin script that arranges windows in a grid
 splitScreenKwinScript() {
     # for debugging run "kwin_x11 --replace" in Desktop Mode before executing the script
     # inspiration from https://github.com/darkstego/Mudeer/blob/master/package/contents/code/main.js
@@ -53,6 +55,7 @@ splitScreenKwinScript() {
 ____EOF
 }
 
+# registers, executes and removes a given KWin script
 executeKwinScript() {
     # https://gist.github.com/academo/613c8e2caf970fabd260cfd12820bde3
 
@@ -64,7 +67,9 @@ executeKwinScript() {
     dbus-send --session --dest=org.kde.KWin --print-reply=literal /Scripting org.kde.kwin.Scripting.unloadScript "string:splitscreen" >/dev/null 2>&1
 }
 
+# takes care of launching Plasma (basically Desktop Mode) from inside Game Mode
 nestedPlasma() {
+    # https://gist.github.com/lucsoft/40c929537e083f1984d4dedd393eae80#file-plasmanested-sh
     unset LD_PRELOAD
     unset XDG_DESKTOP_PORTAL_DIR
     unset XDG_SEAT_PATH
@@ -83,6 +88,27 @@ ____EOF
     dbus-run-session startplasma-wayland
 }
 
+# writes a preset config for mcwifipnp that enables Offline Mode whenever a new Minecraft world gets created
+writeOfflineModeConfig() {
+    while sleep 5; do
+        ls -1d /home/deck/.local/share/PollyMC/instances/*/.minecraft/saves/* 2>/dev/null | while read -r world; do
+            if [ ! -f "$world/mcwifipnp.json" ]; then
+                cat <<________________EOF > "$world/mcwifipnp.json"
+                    {
+                        "port": 47283,
+                        "motd": "Splitscreen",
+                        "UseUPnP": false,
+                        "OnlineMode": false,
+                        "EnableUUIDFixer": false,
+                        "CopyToClipboard": false
+                    }
+________________EOF
+            fi
+        done
+    done
+}
+
+# launches Minecraft with power saving and notifications disabled and waits until a new window appears
 launchGame() {
     windowCountBeforeLaunch=$(xwininfo -root -tree | grep 854x480 | wc -l)
     kde-inhibit --power --screenSaver --colorCorrect --notifications /home/deck/.local/share/PollyMC/PollyMC-Linux-x86_64.AppImage -l "$1" -a "$2" &
@@ -92,8 +118,11 @@ launchGame() {
     done
 }
 
+# launches 2-4 games in order, hides the task bar and triggers the splitScreen function when all instances are running
 launchGames() {
     qdbus org.kde.plasmashell /PlasmaShell evaluateScript "panelById(panelIds[0]).hiding = 'autohide';"
+    writeOfflineModeConfig &
+    writeOfflineModeConfigPID=$!
 
     launchGame 1.20.1-1 P1
     launchGame 1.20.1-2 P2
@@ -103,12 +132,14 @@ launchGames() {
     qdbus org.kde.plasmashell /PlasmaShell evaluateScript "panelById(panelIds[0]).hiding = 'autohide';" # didn't always trigger the first time
     splitScreen "Minecraft"
 
+    kill $writeOfflineModeConfigPID
     wait
 
     qdbus org.kde.plasmashell /PlasmaShell evaluateScript "panelById(panelIds[0]).hiding = 'none';"
     sleep 2
 }
 
+# takes care of writing an autostart entry for Plasma and calling the correct functions based on where and how this script is started
 (
     echo "$(date) - Script called with $# arguments: $@"
     export numberOfControllers=$(( $(ls -1 /dev/input/js* | wc -l) / 2 )) # each one should have the real one and an emulated xbox one
@@ -127,11 +158,9 @@ launchGames() {
             /home/deck/.local/share/PollyMC/PollyMC-Linux-x86_64.AppImage -l 1.20.1-1 -a P1
         else
             SCRIPT_PATH="$(readlink -f "$0")"
-            echo "Creating autostart file with script path: $SCRIPT_PATH"
             mkdir -p ~/.config/autostart
             echo -e "[Desktop Entry]\nExec=\"$SCRIPT_PATH\" launchFromGameMode\nIcon=dialog-scripts\nName=Minecraft\nPath=\nType=Application\nX-KDE-AutostartScript=true" > ~/.config/autostart/minecraft.desktop
             chmod +x ~/.config/autostart/minecraft.desktop
-            echo "Autostart file created at ~/.config/autostart/minecraft.desktop"
             nestedPlasma
         fi
     fi
