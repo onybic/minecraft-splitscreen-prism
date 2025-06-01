@@ -312,7 +312,7 @@ ________EOF
 
     # download the launch wrapper
     rm -f minecraft.sh
-    curlProgress da67cc7d08832f7c1e0fd513a9c160cc \
+    curlProgress ce1247344b1ef1531a93d2f32eb53ea9 \
                  'Launch script' \
                  minecraft.sh \
                  https://raw.githubusercontent.com/ArnoldSmith86/minecraft-splitscreen/refs/heads/main/minecraft.sh
@@ -347,3 +347,5 @@ if zenity --question --icon-name=dialog-ok --text='No errors. Go back to Game Mo
 elif ! pgrep -F ~/.steam/steam.pid >/dev/null; then
     nohup steam >/dev/null 2>&1 &
 fi
+
+# END OF FILE

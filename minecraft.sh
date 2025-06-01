@@ -8,6 +8,7 @@
 # 4. It executes a KWin script that removes borders of all windows and arranges them in a grid.
 
 export target=/tmp
+cd /home/deck/.local/share/PollyMC
 
 # writes a KWin (Steam Deck window manager) script to a file and executes it
 splitScreen() {
@@ -91,7 +92,7 @@ ____EOF
 # writes a preset config for mcwifipnp that enables Offline Mode whenever a new Minecraft world gets created
 writeOfflineModeConfig() {
     while sleep 5; do
-        ls -1d /home/deck/.local/share/PollyMC/instances/*/.minecraft/saves/* 2>/dev/null | while read -r world; do
+        ls -1d instances/*/.minecraft/saves/* 2>/dev/null | while read -r world; do
             if [ ! -f "$world/mcwifipnp.json" ]; then
                 cat <<________________EOF > "$world/mcwifipnp.json"
                     {
@@ -111,7 +112,8 @@ ________________EOF
 # launches Minecraft with power saving and notifications disabled and waits until a new window appears
 launchGame() {
     windowCountBeforeLaunch=$(xwininfo -root -tree | grep 854x480 | wc -l)
-    kde-inhibit --power --screenSaver --colorCorrect --notifications /home/deck/.local/share/PollyMC/PollyMC-Linux-x86_64.AppImage -l "$1" -a "$2" &
+    kde-inhibit --power --screenSaver --colorCorrect --notifications ./PollyMC-Linux-x86_64.AppImage -l "$1" -a "$2" &
+    echo $! >> minecraft.pid
     # wait for the game window to appear so the order of the windows is correct
     while [ $(xwininfo -root -tree | grep 854x480 | wc -l) -le $windowCountBeforeLaunch ]; do
         sleep 1
@@ -124,6 +126,7 @@ launchGames() {
     writeOfflineModeConfig &
     writeOfflineModeConfigPID=$!
 
+    rm -f minecraft.pid
     launchGame 1.20.1-1 P1
     launchGame 1.20.1-2 P2
     [ "$numberOfControllers" -gt 2 ] && launchGame 1.20.1-3 P3
@@ -132,9 +135,9 @@ launchGames() {
     qdbus org.kde.plasmashell /PlasmaShell evaluateScript "panelById(panelIds[0]).hiding = 'autohide';" # didn't always trigger the first time
     splitScreen "Minecraft"
 
-    kill $writeOfflineModeConfigPID
-    wait
+    wait $(<minecraft.pid)
 
+    kill $writeOfflineModeConfigPID
     qdbus org.kde.plasmashell /PlasmaShell evaluateScript "panelById(panelIds[0]).hiding = 'none';"
     sleep 2
 }
@@ -155,7 +158,7 @@ launchGames() {
         launchGames
     else
         if [ "$numberOfControllers" -lt 2 ]; then
-            /home/deck/.local/share/PollyMC/PollyMC-Linux-x86_64.AppImage -l 1.20.1-1 -a P1
+            ./PollyMC-Linux-x86_64.AppImage -l 1.20.1-1 -a P1
         else
             SCRIPT_PATH="$(readlink -f "$0")"
             mkdir -p ~/.config/autostart
@@ -164,4 +167,4 @@ launchGames() {
             nestedPlasma
         fi
     fi
-) >> /home/deck/.local/share/PollyMC/minecraft.sh.log 2>&1
+) >> minecraft.sh.log 2>&1
