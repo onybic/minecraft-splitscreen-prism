@@ -1,0 +1,8 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Install Splitscreen Minecraft
+Exec=sh -c 'curl https://raw.githubusercontent.com/onybic/minecraft-splitscreen-prism/refs/heads/main/install.sh  | bash'
+Icon=steamdeck-gaming-return
+Terminal=true
+Type=Application
+StartupNotify=false
