@@ -12,7 +12,7 @@ A script to run multiple instances of Minecraft in splitscreen mode on Steam Dec
 
 ## Installation
 
-Download [InstallMinecraft.desktop](https://github.com/ArnoldSmith86/minecraft-splitscreen/releases/download/0.1/InstallMinecraft.desktop) with your Steam Deck in Desktop Mode and open it in the file browser Dolphin.
+Download [InstallMinecraft.desktop](https://github.com/onybic/minecraft-splitscreen-prism/releases/download/0.1/Install.Minecraft.desktop) with your Steam Deck in Desktop Mode and open it in the file browser Dolphin.
 
 It should:
 - Download PrismLauncher and Java 17
