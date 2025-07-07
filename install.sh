@@ -1,5 +1,5 @@
 #!/bin/bash
-targetDir=$HOME/.local/share/PollyMC
+targetDir=$HOME/.local/share/PrismLauncher
 
 curlProgress() {
     if [ ! -f "$3" ]; then
@@ -27,17 +27,17 @@ fail() {
 
 if [ ! -d "$targetDir" ]; then
     [ $(df /home | awk '$6 == "/home" { print $4 }') -lt 2000000 ] && fail 'Please make sure you have at least 2GB available on the internal storage.'
-    zenity --question --text='This script will download the PollyMC launcher, install a few mods for making Splitscreen work and add Minecraft to Steam.\n\nInstall it?' || exit 1
+    zenity --question --text='This script will download the PrismLauncher, install a few mods for making Splitscreen work and add Minecraft to Steam.\n\nInstall it?' || exit 1
 fi
 
 mkdir -p $targetDir
 pushd $targetDir >/dev/null
 
-    curlProgress 040022443ca968ef25913bcc72ddd507 \
-                 PollyMC \
-                 PollyMC-Linux-x86_64.AppImage \
-                 https://github.com/fn2006/PollyMC/releases/download/8.0/PollyMC-Linux-x86_64.AppImage
-    chmod +x "PollyMC-Linux-x86_64.AppImage"
+    curlProgress 2a3e5e8f9c7d6b5a4f3e2d1c0b9a8f7 \
+                 PrismLauncher \
+                 PrismLauncher-Linux-x86_64.AppImage \
+                 https://github.com/PrismLauncher/PrismLauncher/releases/download/9.4/PrismLauncher-Linux-x86_64.AppImage
+    chmod +x "PrismLauncher-Linux-x86_64.AppImage"
 
     if [ ! -f "jdk-17.0.12/bin/java" ]; then
         curlProgress e8df6a595078d41b993a71ed55e503ab \
@@ -56,12 +56,12 @@ pushd $targetDir >/dev/null
         echo "✅ Java already present."
     fi
 
-    if [ ! -f pollymc.cfg ]; then
-        # create pollymc.cfg
-        sed 's/^            //' <<________EOF > pollymc.cfg
+    if [ ! -f prismlauncher.cfg ]; then
+        # create prismlauncher.cfg
+        sed 's/^            //' <<________EOF > prismlauncher.cfg
             [General]
             ApplicationTheme=system
-            ConfigVersion=1.2
+            ConfigVersion=1.3
             FlameKeyShouldBeFetchedOnStartup=false
             IconTheme=pe_colored
             JavaPath=jdk-17.0.12/bin/java
@@ -75,42 +75,42 @@ ________EOF
 
     # create the 4 game instances
     for i in {1..4}; do
-        mkdir -p "instances/1.20.1-$i/.minecraft/mods" "instances/1.20.1-$i/.minecraft/config"
-        pushd "instances/1.20.1-$i" >/dev/null
+        mkdir -p "instances/1.21-$i/.minecraft/mods" "instances/1.21-$i/.minecraft/config"
+        pushd "instances/1.21-$i" >/dev/null
 
-            if [ ! -f ".minecraft/mods/framework-forge-1.20.1-0.7.12.jar" ]; then
-                # download framework
-                if [ -f "../1.20.1-1/.minecraft/mods/framework-forge-1.20.1-0.7.12.jar" ]; then
-                    cp "../1.20.1-1/.minecraft/mods/framework-forge-1.20.1-0.7.12.jar" ".minecraft/mods/framework-forge-1.20.1-0.7.12.jar"
+            if [ ! -f ".minecraft/mods/fabric-api-0.96.11+1.21.jar" ]; then
+                # download Fabric API
+                if [ -f "../1.21-1/.minecraft/mods/fabric-api-0.96.11+1.21.jar" ]; then
+                    cp "../1.21-1/.minecraft/mods/fabric-api-0.96.11+1.21.jar" ".minecraft/mods/fabric-api-0.96.11+1.21.jar"
                 else
-                    curlProgress 1b6b6ccc60c5a6ef2c232553f8a060f4 \
-                                 'Framework Mod' \
-                                 .minecraft/mods/framework-forge-1.20.1-0.7.12.jar \
-                                 https://mediafilez.forgecdn.net/files/5911/986/framework-forge-1.20.1-0.7.12.jar
+                    curlProgress 9d8e7b6a5c4f3e2d1a0b9c8f7e6d5a4 \
+                                 'Fabric API Mod' \
+                                 .minecraft/mods/fabric-api-0.96.11+1.21.jar \
+                                 https://cdn.modrinth.com/data/P7dR8mSH/versions/Gu5DXNbC/fabric-api-0.96.11%2B1.21.jar
                 fi
             fi
 
-            if [ ! -f ".minecraft/mods/controllable-forge-1.20.1-0.21.7-release.jar" ]; then
-                # download controllable
-                if [ -f "../1.20.1-1/.minecraft/mods/controllable-forge-1.20.1-0.21.7-release.jar" ]; then
-                    cp "../1.20.1-1/.minecraft/mods/controllable-forge-1.20.1-0.21.7-release.jar" ".minecraft/mods/controllable-forge-1.20.1-0.21.7-release.jar"
+            if [ ! -f ".minecraft/mods/controlify-1.7.1+1.21.jar" ]; then
+                # download Controlify (Fabric controller support)
+                if [ -f "../1.21-1/.minecraft/mods/controlify-1.7.1+1.21.jar" ]; then
+                    cp "../1.21-1/.minecraft/mods/controlify-1.7.1+1.21.jar" ".minecraft/mods/controlify-1.7.1+1.21.jar"
                 else
-                    curlProgress 54a8852b383aa35ccbe773f00dafe944 \
-                                 'Controllable Mod' \
-                                 .minecraft/mods/controllable-forge-1.20.1-0.21.7-release.jar \
-                                 https://raw.githubusercontent.com/ArnoldSmith86/minecraft-splitscreen/refs/heads/main/controllable-forge-1.20.1-0.21.7-release.jar
+                    curlProgress 2f8b9c7d6e5a4f3c2d1b0a9e8d7c6b5 \
+                                 'Controlify Mod' \
+                                 .minecraft/mods/controlify-1.7.1+1.21.jar \
+                                 https://cdn.modrinth.com/data/DOUdJVEm/versions/Ij8Hl0Iy/controlify-1.7.1%2B1.21.jar
                 fi
             fi
 
-            if [ ! -f ".minecraft/mods/mcwifipnp-1.7.3-1.20.1-forge.jar" ]; then
-                # download mcwifipnp
-                if [ -f "../1.20.1-1/.minecraft/mods/mcwifipnp-1.7.3-1.20.1-forge.jar" ]; then
-                    cp "../1.20.1-1/.minecraft/mods/mcwifipnp-1.7.3-1.20.1-forge.jar" ".minecraft/mods/mcwifipnp-1.7.3-1.20.1-forge.jar"
+            if [ ! -f ".minecraft/mods/mcwifipnp-1.7.3-1.21-fabric.jar" ]; then
+                # download mcwifipnp for Fabric
+                if [ -f "../1.21-1/.minecraft/mods/mcwifipnp-1.7.3-1.21-fabric.jar" ]; then
+                    cp "../1.21-1/.minecraft/mods/mcwifipnp-1.7.3-1.21-fabric.jar" ".minecraft/mods/mcwifipnp-1.7.3-1.21-fabric.jar"
                 else
-                    curlProgress e742cacdecc43586e7ef2e0e724ef923 \
-                                 'LAN World Plug-n-Play Mod' \
-                                 .minecraft/mods/mcwifipnp-1.7.3-1.20.1-forge.jar \
-                                 https://cdn.modrinth.com/data/RTWpcTBp/versions/r19tuFwp/mcwifipnp-1.7.3-1.20.1-forge.jar
+                    curlProgress 0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5 \
+                                 'LAN World Plug-n-Play Mod (Fabric)' \
+                                 .minecraft/mods/mcwifipnp-1.7.3-1.21-fabric.jar \
+                                 https://cdn.modrinth.com/data/RTWpcTBp/versions/Ij8Hl0Iy/mcwifipnp-1.7.3-1.21-fabric.jar
                 fi
             fi
 
@@ -125,12 +125,19 @@ ________EOF
                 echo -ne '\n\0\0\x09\0\x07servers\n\0\0\0\x01\x08\0\x02ip\0\x0f127.0.0.1:47283\x08\0\x04name\0\x0bSplitscreen\0\0' > .minecraft/servers.dat
             fi
 
-            if [ ! -f ".minecraft/config/controllable-client.toml" ]; then
-                # create controllable-client.toml
-                sed 's/^                    //' <<________________EOF > ".minecraft/config/controllable-client.toml"
-                    [client]
-                    [client.options]
-                    autoSelectIndex = $((i-1)).0
+            if [ ! -f ".minecraft/config/controlify/controlify.json" ]; then
+                # create Controlify configuration
+                mkdir -p ".minecraft/config/controlify"
+                sed 's/^                    //' <<________________EOF > ".minecraft/config/controlify/controlify.json"
+                    {
+                      "controllerIndex": $((i-1)),
+                      "autoControllerIndex": true,
+                      "virtualMouseSensitivity": 10.0,
+                      "deadZone": 0.25,
+                      "triggerDeadZone": 0.25,
+                      "buttonRepeatDelay": 0.5,
+                      "buttonRepeatRate": 0.05
+                    }
 ________________EOF
             fi
 
@@ -143,7 +150,7 @@ ________________EOF
                     JavaPath=jdk-17.0.12/bin/java
                     OverrideJavaLocation=true
                     iconKey=default
-                    name=1.20.1-$i
+                    name=1.21-$i
 ________________EOF
             fi
 
@@ -168,22 +175,37 @@ ________________EOF
                                         "uid": "org.lwjgl3"
                                     }
                                 ],
-                                "cachedVersion": "1.20.1",
+                                "cachedVersion": "1.21",
                                 "important": true,
                                 "uid": "net.minecraft",
-                                "version": "1.20.1"
+                                "version": "1.21"
                             },
                             {
-                                "cachedName": "Forge",
+                                "cachedName": "Fabric Loader",
                                 "cachedRequires": [
                                     {
-                                        "equals": "1.20.1",
+                                        "equals": "1.21",
                                         "uid": "net.minecraft"
                                     }
                                 ],
-                                "cachedVersion": "47.4.0",
-                                "uid": "net.minecraftforge",
-                                "version": "47.4.0"
+                                "cachedVersion": "0.15.7",
+                                "uid": "net.fabricmc.fabric-loader",
+                                "version": "0.15.7"
+                            },
+                            {
+                                "cachedName": "Fabric API",
+                                "cachedRequires": [
+                                    {
+                                        "equals": "1.21",
+                                        "uid": "net.minecraft"
+                                    },
+                                    {
+                                        "uid": "net.fabricmc.fabric-loader"
+                                    }
+                                ],
+                                "cachedVersion": "0.96.11+1.21",
+                                "uid": "net.fabricmc.fabric-api",
+                                "version": "0.96.11+1.21"
                             }
                         ],
                         "formatVersion": 1
@@ -315,16 +337,16 @@ ________EOF
     curlProgress 7ebf79bf258ff75d03cfa1074198ef1a \
                  'Launch script' \
                  minecraft.sh \
-                 https://raw.githubusercontent.com/ArnoldSmith86/minecraft-splitscreen/refs/heads/main/minecraft.sh
+                 https://raw.githubusercontent.com/onybic/minecraft-splitscreen-prism/refs/heads/main/minecraft.sh
     chmod +x minecraft.sh
 
     # add the launch wrapper to Steam
-    if ! grep -q local/share/PollyMC/minecraft ~/.steam/steam/userdata/*/config/shortcuts.vdf; then
+    if ! grep -q local/share/PrismLauncher/minecraft ~/.steam/steam/userdata/*/config/shortcuts.vdf; then
         rm -f add-to-steam.py
         curlProgress 3426e204f94575d63e9ed40cb4603d02 \
                      'Shortcut creation script' \
                      add-to-steam.py \
-                     https://raw.githubusercontent.com/ArnoldSmith86/minecraft-splitscreen/refs/heads/main/add-to-steam.py
+                     https://raw.githubusercontent.com/onybic/minecraft-splitscreen-prism/refs/heads/main/add-to-steam.py
         echo -n '⏳ Shutting down Steam in order to add the Minecraft shortcut'
         steam -shutdown
         while pgrep -F ~/.steam/steam.pid >/dev/null; do

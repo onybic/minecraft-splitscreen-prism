@@ -4,11 +4,11 @@
 
 # 1. It writes an autostart file for Plasma that launches this script from within Plasma.
 # 2. It starts a nested Plasma session inside Game Mode (because Game Mode cannot display multiple windows).
-# 3. It launches multiple instances of Minecraft using PollyMC depending on how many controllers are connected (1-4).
+# 3. It launches multiple instances of Minecraft using PrismLauncher depending on how many controllers are connected (1-4).
 # 4. It executes a KWin script that removes borders of all windows and arranges them in a grid.
 
 export target=/tmp
-cd /home/deck/.local/share/PollyMC
+cd /home/deck/.local/share/PrismLauncher
 
 # writes a KWin (Steam Deck window manager) script to a file and executes it
 splitScreen() {
@@ -112,7 +112,7 @@ ________________EOF
 # launches Minecraft with power saving and notifications disabled and waits until a new window appears
 launchGame() {
     windowCountBeforeLaunch=$(xwininfo -root -tree | grep 854x480 | wc -l)
-    kde-inhibit --power --screenSaver --colorCorrect --notifications ./PollyMC-Linux-x86_64.AppImage -l "$1" -a "$2" &
+    kde-inhibit --power --screenSaver --colorCorrect --notifications ./PrismLauncher-Linux-x86_64.AppImage -l "$1" -a "$2" &
     echo $! >> minecraft.pid
     # wait for the game window to appear so the order of the windows is correct
     while [ $(xwininfo -root -tree | grep 854x480 | wc -l) -le $windowCountBeforeLaunch ]; do
@@ -127,10 +127,10 @@ launchGames() {
     writeOfflineModeConfigPID=$!
 
     rm -f minecraft.pid
-    launchGame 1.20.1-1 P1
-    launchGame 1.20.1-2 P2
-    [ "$numberOfControllers" -gt 2 ] && launchGame 1.20.1-3 P3
-    [ "$numberOfControllers" -gt 3 ] && launchGame 1.20.1-4 P4
+    launchGame 1.21-1 P1
+    launchGame 1.21-2 P2
+    [ "$numberOfControllers" -gt 2 ] && launchGame 1.21-3 P3
+    [ "$numberOfControllers" -gt 3 ] && launchGame 1.21-4 P4
 
     qdbus org.kde.plasmashell /PlasmaShell evaluateScript "panelById(panelIds[0]).hiding = 'autohide';" # didn't always trigger the first time
     splitScreen "^Minecraft"
@@ -158,7 +158,7 @@ launchGames() {
         launchGames
     else
         if [ "$numberOfControllers" -lt 2 ]; then
-            ./PollyMC-Linux-x86_64.AppImage -l 1.20.1-1 -a P1
+            ./PrismLauncher-Linux-x86_64.AppImage -l 1.21-1 -a P1
         else
             SCRIPT_PATH="$(readlink -f "$0")"
             mkdir -p ~/.config/autostart
