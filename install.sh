@@ -389,7 +389,7 @@ ________EOF
     chmod +x minecraft.sh
 
     # add the launch wrapper to Steam
-    if ! grep -q "PrismLauncher/minecraft" ~/.steam/steam/userdata/*/config/shortcuts.vdf; then
+    if ! grep -q "Minecraft Splitscreen Prism" ~/.steam/steam/userdata/*/config/shortcuts.vdf 2>/dev/null; then
         rm -f add-to-steam.py
         curlProgress 'Shortcut creation script' \
                      add-to-steam.py \
@@ -423,7 +423,10 @@ ________EOF
         fi
         echo "♻️ Restarting Steam..."
         nohup steam >/dev/null 2>&1 &
+    else
+        echo "✅ Minecraft Splitscreen Prism shortcut already exists in Steam"
     fi
+
 popd >/dev/null
 
 if zenity --question --icon-name=dialog-ok --text='No errors. Go back to Game Mode and start Minecraft.\n\nGo to Game Mode now?'; then
