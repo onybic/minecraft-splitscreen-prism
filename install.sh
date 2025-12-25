@@ -389,7 +389,7 @@ ________EOF
     chmod +x minecraft.sh
 
     # add the launch wrapper to Steam
-    if ! grep -q "Minecraft Splitscreen Prism" ~/.steam/steam/userdata/*/config/shortcuts.vdf 2>/dev/null; then
+    if ! grep -q "Minecraft Splitscreen Prism" ~/.local/share/Steam/userdata/*/config/shortcuts.vdf 2>/dev/null; then
         rm -f add-to-steam.py
         curlProgress 'Shortcut creation script' \
                      add-to-steam.py \
